@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Register | Campus to Career</title>
+    <link rel="stylesheet" href="../css/register.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <!-- Header -->
+        <header class="navbar">
+            <div class="logo">
+                <h2>Campus to Career</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Registration Form Section -->
+        <section class="form-section">
+            <div class="container">
+                <h2>Create an Account</h2>
+                <form @submit.prevent="register">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" v-model="form.name" placeholder="Enter your full name" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" v-model="form.email" placeholder="Enter your email" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" v-model="form.password" placeholder="Create a password" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="role">Register as</label>
+                        <select id="role" v-model="form.role" required>
+                            <option disabled value="">Select role</option>
+                            <option value="student">Student</option>
+                            <option value="employer">Employer</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="submit-button">Register</button>
+                </form>
+
+                <p class="form-note">
+                    Already have an account? <a href="login.html">Login here</a>.
+                </p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 Campus to Career. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                form: {
+                    name: '',
+                    email: '',
+                    password: '',
+                    role: ''
+                }
+            },
+            methods: {
+                async register() {
+                    try {
+                        const response = await fetch('http://localhost:5000/api/auth/register', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(this.form)
+                        });
+
+                        const data = await response.json();
+                        if (response.ok) {
+                            alert('Registration successful!');
+                            window.location.href = 'login.html';
+                        } else {
+                            alert(data.message || 'Registration failed.');
+                        }
+                    } catch (error) {
+                        alert('Error: ' + error.message);
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

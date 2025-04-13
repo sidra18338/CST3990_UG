@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Campus to Career</title>
+    <link rel="stylesheet" href="../css/admindashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- Header -->
+      <header class="navbar">
+        <div class="logo">
+          <h2>Campus to Career</h2>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="admindashboard.html">Dashboard</a></li>
+            <li><a href="#" @click="logout">Logout</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <!-- Dashboard -->
+      <section class="dashboard">
+        <h2>Welcome, Admin</h2>
+
+        <!-- Add User -->
+        <div class="card">
+          <h3>Add User</h3>
+          <form @submit.prevent="addUser">
+            <div>
+              <label for="name">Name:</label>
+              <input type="text" v-model="newUser.name" required />
+            </div>
+            <div>
+              <label for="email">Email:</label>
+              <input type="email" v-model="newUser.email" required />
+            </div>
+            <div>
+              <label for="password">Password:</label>
+              <input type="password" v-model="newUser.password" required />
+            </div>
+            <div>
+              <label for="role">Role:</label>
+              <select v-model="newUser.role" required>
+                <option value="student">Student</option>
+                <option value="employer">Employer</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <button type="submit" class="submit-button">Add User</button>
+          </form>
+        </div>
+
+        <!-- Manage Users -->
+        <div class="card">
+          <h3>Manage Users</h3>
+          <ul>
+            <li v-for="user in users" :key="user._id">
+              {{ user.email }} - {{user.role}}
+              <button @click="deleteUser(user._id)">Delete</button>
+              <!-- Delete button -->
+            </li>
+          </ul>
+        </div>
+
+        <!-- Manage Internships -->
+        <div class="card">
+          <h3>Manage Internships</h3>
+          <ul>
+            <li v-for="internship in internships" :key="internship._id">
+              {{ internship.title }} - {{ internship.location }}
+
+              <!-- Show status or buttons depending on approval -->
+              <span v-if="internship.status === 'approved'">Approved</span>
+              <span v-if="internship.status === 'rejected'">Rejected</span>
+
+              <button
+                v-if="internship.status === 'pending'"
+                @click="approveInternship(internship._id)"
+              >
+                Approve
+              </button>
+              <button
+                v-if="internship.status === 'pending'"
+                @click="rejectInternship(internship._id)"
+              >
+                Reject
+              </button>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer>
+        <p>&copy; 2025 Campus to Career</p>
+      </footer>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          users: [],
+          internships: [],
+          blogs: [],
+          newBlog: {
+            title: "",
+            content: "",
+          },
+          newUser: {
+            name: "",
+            email: "",
+            password: "",
+            role: "student",
+          },
+        },
+        created() {
+          this.fetchUsers();
+          this.fetchInternships();
+          this.fetchBlogs();
+        },
+        methods: {
+          // Get the token from localStorage
+          getAuthHeaders() {
+  const token = localStorage.getItem("token"); // Retrieve token from localStorage
+  if (!token) {
+    alert("No token found. Please log in again.");
+    window.location.href = "login.html"; // Redirect to login page if no token
+    return; // Ensure no further code is executed if token is missing
+  }
+  return {
+    headers: { 
+      Authorization: `Bearer ${token}`, // Make sure it's in the correct format
+      "Content-Type": "application/json" // Ensure proper content type for JSON
+    },
+  };
+},
+
+          // Fetch Users
+          async fetchUsers() {
+            const token = localStorage.getItem("token"); // Retrieve token from localStorage
+            const headers = { Authorization: `Bearer ${token}` };
+
+            try {
+              const res = await fetch("http://localhost:5000/api/users", {
+                headers,
+              });
+              const data = await res.json();
+
+              if (!res.ok) {
+                throw new Error(data.message || "Failed to fetch users");
+              }
+
+              this.users = data; // Set users data
+            } catch (err) {
+              alert("Failed to fetch users.");
+              console.error("Error:", err); // Log error details
+            }
+          },
+
+          // Add User
+          async addUser() {
+            try {
+              const res = await fetch(
+                "http://localhost:5000/api/auth/register",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(this.newUser),
+                }
+              );
+              const data = await res.json();
+              if (!res.ok)
+                throw new Error(data.message || "Failed to add user");
+
+              this.newUser = { name: "", email: "", password: "", role: "" }; // Reset form
+              this.fetchUsers(); // Fetch updated list of users
+              alert("User added successfully!");
+            } catch (err) {
+              alert(err.message);
+              console.error("Error details:", err);
+            }
+          },
+
+          // Delete User
+          async deleteUser(userId) {
+            const token = localStorage.getItem("token"); // Retrieve token from localStorage
+            const headers = { Authorization: `Bearer ${token}` };
+
+            try {
+              const res = await fetch(
+                `http://localhost:5000/api/users/${userId}`,
+                {
+                  method: "DELETE",
+                  headers: headers,
+                }
+              );
+              const data = await res.json();
+
+              if (!res.ok)
+                throw new Error(data.message || "Failed to delete user");
+
+              this.fetchUsers(); // Fetch the updated list of users
+              alert("User deleted successfully!");
+            } catch (err) {
+              alert("Failed to delete user.");
+              console.error("Error details:", err);
+            }
+          },
+
+          // Fetch Internships
+          async fetchInternships() {
+            try {
+              const res = await fetch(
+                "http://localhost:5000/api/internships",
+                this.getAuthHeaders()
+              );
+              this.internships = await res.json();
+            } catch (err) {
+              alert("Failed to fetch internships.");
+              console.error("Error:", err);
+            }
+          },
+
+          // Approve Internship
+          async approveInternship(id) {
+            try {
+              const res = await fetch(
+                `http://localhost:5000/api/internships/approve/${id}`,
+                {
+                  method: "PUT",
+                  headers: this.getAuthHeaders(),
+                }
+              );
+              const data = await res.json();
+              if (!res.ok)
+                throw new Error(data.message || "Failed to approve internship");
+
+              // Update the internship status to approved
+              const internship = this.internships.find(
+                (internship) => internship._id === id
+              );
+              internship.status = "approved";
+
+              alert("Internship approved!");
+            } catch (err) {
+              alert("Failed to approve internship.");
+              console.error("Error:", err);
+            }
+          },
+
+          // Reject Internship
+          async rejectInternship(id) {
+            try {
+              const res = await fetch(
+                `http://localhost:5000/api/internships/reject/${id}`,
+                {
+                  method: "PUT",
+                  headers: this.getAuthHeaders(),
+                }
+              );
+              const data = await res.json();
+              if (!res.ok)
+                throw new Error(data.message || "Failed to reject internship");
+
+              // Update the internship status to rejected
+              const internship = this.internships.find(
+                (internship) => internship._id === id
+              );
+              internship.status = "rejected";
+
+              alert("Internship rejected!");
+            } catch (err) {
+              alert("Failed to reject internship.");
+              console.error("Error:", err);
+            }
+          },
+
+          // Fetch Blogs
+          async fetchBlogs() {
+            try {
+              const res = await fetch(
+                "http://localhost:5000/api/blogs",
+                this.getAuthHeaders()
+              );
+              this.blogs = await res.json();
+            } catch (err) {
+              alert("Failed to fetch blogs.");
+              console.error("Error:", err);
+            }
+          },
+          // Add Blog
+          async addBlog() {
+  const token = localStorage.getItem("token");
+  console.log("Token in addBlog:", token); // Log the token
+
+  try {
+    const res = await fetch("http://localhost:5000/api/blogs", {
+      method: "POST",
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(this.newBlog),
+    });
+    
+    if (!res.ok) throw new Error("Failed to add blog");
+
+    this.newBlog = { title: "", content: "" };  // Reset form fields
+    this.fetchBlogs();  // Fetch the updated list of blogs
+    alert("Blog added successfully!");
+  } catch (err) {
+    alert(err.message);
+    console.error("Error details:", err);  // Log the error for debugging
+  }
+},
+          // Logout
+          logout() {
+            localStorage.removeItem("token"); // Clear the token
+            window.location.href = "login.html"; // Redirect to login page
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

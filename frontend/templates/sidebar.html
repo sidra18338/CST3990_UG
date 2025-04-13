@@ -1,0 +1,29 @@
+<!-- templates/sidebar.html -->
+<aside class="sidebar" :class="{ collapsed: isCollapsed }">
+    <div class="sidebar-brand">
+      <a href="/pages/index.html">
+        <img src="/assets/images/logo.png" alt="Logo" height="40" />
+      </a>
+    </div>
+    <nav class="sidebar-nav">
+      <ul v-if="role === 'student'">
+        <li><a href="/pages/student-dashboard.html">Dashboard</a></li>
+        <li><a href="#">My Applications</a></li>
+        <li><a href="#">Profile</a></li>
+      </ul>
+  
+      <ul v-else-if="role === 'employer'">
+        <li><a href="/pages/employer-dashboard.html">Dashboard</a></li>
+        <li><a href="#">Post Internship</a></li>
+        <li><a href="#">Applications</a></li>
+      </ul>
+  
+      <ul v-else-if="role === 'admin'">
+        <li><a href="/pages/admin-dashboard.html">Dashboard</a></li>
+        <li><a href="#">Manage Users</a></li>
+        <li><a href="/pages/blog-management.html">Manage Blogs</a></li>
+        <li><a href="#">Internship Listings</a></li>
+      </ul>
+    </nav>
+  </aside>
+  

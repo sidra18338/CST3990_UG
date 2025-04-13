@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employer Dashboard | Campus to Career</title>
+    <link rel="stylesheet" href="../css/employerdashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- Header -->
+      <header class="navbar">
+        <div class="logo">
+          <h2>Campus to Career</h2>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="employer-dashboard.html">Dashboard</a></li>
+            <li><a href="#" @click="logout">Logout</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <!-- Dashboard -->
+      <section class="dashboard">
+        <h2>Welcome, {{ user.name }}</h2>
+
+        <!-- Post Internship -->
+        <div class="card">
+          <h3>Post New Internship</h3>
+          <form @submit.prevent="postInternship">
+            <input
+              type="text"
+              v-model="newInternship.title"
+              placeholder="Title"
+              required
+            />
+            <input
+              type="text"
+              v-model="newInternship.location"
+              placeholder="Location"
+              required
+            />
+            <input
+              type="text"
+              v-model="newInternship.duration"
+              placeholder="Duration"
+              required
+            />
+            <input
+              type="text"
+              v-model="newInternship.stipend"
+              placeholder="Stipend"
+            />
+            <textarea
+              v-model="newInternship.description"
+              placeholder="Description"
+              required
+            ></textarea>
+            <button type="submit">Post Internship</button>
+          </form>
+        </div>
+
+        <!-- Applications Received -->
+        <div class="card">
+          <h3>Applications Received</h3>
+          <ul>
+            <li v-for="app in applications" :key="app._id">
+              <strong>{{ app.student.name }}</strong> applied to
+              <em>{{ app.internship.title }}</em> - Status: {{ app.status }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Profile Info -->
+        <div class="card">
+          <h3>Your Profile</h3>
+          <p><strong>Name:</strong> {{ user.name || 'Loading...' }}</p>
+<p><strong>Email:</strong> {{ user.email || 'Loading...' }}</p>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer>
+        <p>&copy; 2025 Campus to Career. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          user: {},
+          applications: [],
+          newInternship: {
+            title: "",
+            description: "",
+            location: "",
+            duration: "",
+            stipend: "",
+          },
+          token: localStorage.getItem("token"),
+        },
+        created() {
+          this.fetchProfile();
+          this.fetchApplications();
+        },
+        methods: {
+          async fetchProfile() {
+            console.log("Token being sent:", this.token); // Log the token here
+
+            try {
+              const res = await fetch("http://localhost:5000/api/users/me", {
+                headers: {
+                    Authorization: `Bearer ${this.token}`, // Ensure 'Bearer' is included
+                },
+              });
+
+              if (!res.ok) {
+                throw new Error("Failed to fetch profile");
+              }
+
+              const data = await res.json();
+              console.log("Profile data:", data); // Log the profile data to see if it's correct
+              this.user = data;
+            } catch (error) {
+              console.error("Error fetching profile:", error);
+            }
+          },
+          async fetchApplications() {
+            const res = await fetch(
+              "http://localhost:5000/api/applications/employer",
+              {
+                headers: {
+                    Authorization: `Bearer ${this.token}`, // Ensure 'Bearer' is included
+                },
+              }
+            );
+            const data = await res.json();
+            this.applications = data;
+          },
+          async postInternship() {
+            const res = await fetch("http://localhost:5000/api/internships", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.token}`, // Ensure 'Bearer' is included
+              },
+              body: JSON.stringify(this.newInternship),
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+              alert("Internship posted!");
+              // Reset the form fields
+              this.newInternship = {
+                title: "",
+                description: "",
+                location: "",
+                duration: "",
+                stipend: "",
+              };
+              this.$nextTick(() => {
+                document.querySelector("form").reset();
+              });
+            } else {
+              alert(data.message || "Error posting internship.");
+            }
+          },
+          logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

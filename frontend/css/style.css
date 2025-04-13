@@ -1,0 +1,389 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+/* Navbar Styles */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent;
+  color: #fff;
+  padding: 15px 20px;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  transition: background-color 0.3s;
+}
+
+header.sticky {
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+header .logo h2 {
+  font-size: 1.8rem;
+  color: #ff7f50;  /* Primary color for the logo */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+header nav ul {
+  display: flex;
+}
+
+header nav ul li {
+  margin-left: 20px;
+}
+
+header nav ul li a {
+  color: #fff;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+header nav ul li a:hover {
+  color: #ff7f50;  /* Primary color on hover */
+}
+
+/* Hero Section */
+.hero {
+  background: url('../assests/about.jpg') no-repeat center center/cover;
+  color: #fff;
+  text-align: center;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75); /* Overlay with opacity 0.7 */
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  color: #fff;
+  z-index: 1;
+}
+
+.hero p {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  color: #fff;
+  z-index: 1;
+}
+
+.hero a {
+  background-color: #ff7f50;
+  color: #fff;
+  padding: 12px 30px;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  z-index: 1;
+}
+
+.hero a:hover {
+  background-color: #e75d3f;
+}
+
+/* About Us Section */
+.about-us {
+  background-color: #fff;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.about-us h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.about-us p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Mission Section */
+.mission {
+  background-color: #f9f9f9;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.mission h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.mission p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Vision Section */
+.vision {
+  background-color: #fff;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.vision h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.vision p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Meet the Team Section */
+.team {
+  background-color: #f9f9f9;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.team h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.team-member {
+  display: inline-block;
+  width: 200px;
+  margin: 20px;
+  text-align: center;
+}
+
+.team-member img {
+  width: 100%;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.team-member h3 {
+  font-size: 1.4rem;
+  margin-top: 10px;
+}
+
+.team-member p {
+  color: #777;
+  font-size: 1.1rem;
+}
+
+.team .linkedin-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #0077b5;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 4px;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.team .linkedin-btn:hover {
+  background-color: #005f8b;
+}
+
+.team p {
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+/* Services Section */
+.services {
+  background-color: #fff;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.services h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.service-item {
+  display: inline-block;
+  width: 30%;
+  margin: 20px;
+  text-align: center;
+}
+
+.service-item i {
+  font-size: 3rem;
+  color: #ff7f50;
+  margin-bottom: 15px;
+}
+
+.service-item h3 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.service-item p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Testimonials Section */
+.testimonials {
+  background-color: #f9f9f9;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.testimonials h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.testimonial-item {
+  margin: 20px;
+  font-size: 1.2rem;
+  color: #555;
+  font-style: italic;
+}
+
+.testimonial-item span {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* Call to Action Section */
+.cta {
+  background-color: #ff7f50;
+  color: #fff;
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.cta h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.cta p {
+  font-size: 1.3rem;
+  margin-bottom: 30px;
+}
+
+.cta a {
+  background-color: #fff;
+  color: #ff7f50;
+  padding: 12px 30px;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.cta a:hover {
+  background-color: #e75d3f;
+}
+
+/* Contact Section */
+.contact {
+  background-color: #fff;
+  padding: 50px 20px;
+}
+
+.contact h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.contact form {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact label {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.contact input, .contact textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.contact button {
+  background-color: #ff7f50;
+  color: #fff;
+  padding: 12px 30px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.contact button:hover {
+  background-color: #e75d3f;
+}
+
+/* Footer Section */
+footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+footer p {
+  font-size: 1rem;
+}
+
+footer a {
+  color: #ff7f50;
+  text-decoration: underline;
+}

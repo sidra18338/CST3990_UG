@@ -1,0 +1,17 @@
+<!-- templates/modal.html -->
+<div class="modal" v-if="showModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>{{ modalTitle }}</h3>
+        <button class="close-modal" @click="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <slot></slot> <!-- Dynamic content inside modal -->
+      </div>
+      <div class="modal-footer">
+        <button class="cta-btn" @click="submitModal">Submit</button>
+        <button class="cta-btn cancel" @click="closeModal">Cancel</button>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,17 @@
+<!-- templates/header.html -->
+<header class="dashboard-header">
+    <div class="header-left">
+      <button class="sidebar-toggle" @click="toggleSidebar">
+        <img src="/assets/icons/menu.svg" alt="Menu" />
+      </button>
+      <h2>{{ pageTitle }}</h2>
+    </div>
+    <div class="header-right">
+      <div class="user-info">
+        <img src="/assets/images/user-avatar.png" alt="User Avatar" class="user-avatar" />
+        <span>{{ username }}</span>
+        <button class="logout-btn" @click="logout">Logout</button>
+      </div>
+    </div>
+  </header>
+  
